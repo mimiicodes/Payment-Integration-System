@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="inputForm.css">
+    <link rel="stylesheet" href="style.css">
+    <link rel="shortcut icon" href="./img/default-logo1.png" type="image/x-icon">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Encode+Sans+Expanded:wght@400;700&display=swap" rel="stylesheet">  
+    <title>Fundraiser</title>
+</head>
+<body>
+
+    <header>
+        <input type="checkbox" name="" id="chk1">
+        <img src="./img/default.png" alt="logo">
+        <ul>
+            <li><a href="#">About us</a></li>
+            <li><a href="#">Features</a></li>
+            <li><a href="#">Donation</a></li>
+            <li><a href="#">Volunteer</a></li>
+            <li><a href="#">Contact</a></li>
+            <li><a href="./index.html"><button id="donateBtn">Home</button></a></li>
+        </ul>
+        <div class="menu">
+            <label for="chk1">
+                <i id="bar" class="fa fa-bars"></i>
+            </label>
+        </div>
+    </header>
+
+    <section class="section part-one">
+
+        <form action="#" id="paymentForm" autocomplete="on">
+            <div class="input__container">
+                <h1>Donate</h1>
+                <p>Please fill in this form to donate.</p>
+                <hr>
+    
+                <label for="form__name"><b>Name</b></label>
+                <input type="text" placeholder="Enter Full Name" name="form__name" id="form__name" required>
+            
+                <label for="email"><b>Email</b></label>
+                <input type="text" placeholder="Enter Email" name="email" id="email" required>
+            
+                <label for="amt"><b>Amount</b></label>
+                <input type="text" placeholder="Enter Amount" name="amt" id="amt" required>
+                <hr>
+            
+                <button type="submit" onclick="payWithPaystack()" class="donatebtn">Make Donation</button>
+            </div>
+            <div class="img__container">
+                <img class="img__div" src="./img/undraw_wallet_aym5.svg" alt="hero">
+            </div>
+          
+        </form>
+        
+    </section>
+
+    <section class="part-two">
+        <div class="part-two-div">
+            <p>Thank you for your donation.<br>Please tell family and friends about us. <br><a href="index.html">Return to Home Page</a></p>
+        </div>
+    </section>
+
+</body>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://js.paystack.co/v1/inline.js"></script>
+    
+    <script>
+        $('.part-two').hide();
+        const paymentForm = document.getElementById('paymentForm');
+    paymentForm.addEventListener("submit", payWithPaystack, false);
+    function payWithPaystack(e) {
+  e.preventDefault();
+  let handler = PaystackPop.setup({
+    key: 'pk_test_47f8adbde0239bd138539667814c7130f4e2637d', // Replace with your public key
+    email: $('#email').val(),
+    amount: parseInt($('#amt').val())*100,
+    currency: 'NGN',
+    channels:['card', 'bank', 'ussd', 'qr', 'mobile_money', 'bank_transfer'],
+    ref: ''+Math.floor((Math.random() * 1000000000) + 1), // generates a pseudo-unique reference. Please replace with a reference you generated. Or remove the line entirely so our API will generate one for you
+    // label: "Optional string that replaces customer email"
+    callback: function(response){
+      let message = 'Payment complete! Reference: ' + response.reference;
+      $('.part-one').hide();
+      $('.part-two').show();
+      alert(message);
+     
+    }
+  });
+  handler.openIframe();
+}
+
+    </script>
+</html>
